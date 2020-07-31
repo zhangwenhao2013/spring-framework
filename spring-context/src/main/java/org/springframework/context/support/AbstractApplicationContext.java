@@ -234,7 +234,7 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 	 * @param parent the parent context
 	 */
 	public AbstractApplicationContext(@Nullable ApplicationContext parent) {
-		this();
+		this();  //创建resourcePatternResolver  并让其持有 ApplicationContext
 		setParent(parent);
 	}
 
