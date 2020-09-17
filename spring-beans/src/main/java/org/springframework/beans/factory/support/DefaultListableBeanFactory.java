@@ -823,6 +823,7 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
 
 	@Override
 	public void freezeConfiguration() {
+		// 冻结bean  (标记) 如果bean 在生产 ,Bean 就不能修改了
 		this.configurationFrozen = true;
 		this.frozenBeanDefinitionNames = StringUtils.toStringArray(this.beanDefinitionNames);
 	}
@@ -855,7 +856,11 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
 		// Trigger initialization of all non-lazy singleton beans...
 		for (String beanName : beanNames) {
 			RootBeanDefinition bd = getMergedLocalBeanDefinition(beanName);
+			// 不是抽象的  是单例的  不是懒加载的
 			if (!bd.isAbstract() && bd.isSingleton() && !bd.isLazyInit()) {
+				// 是不是是实现了  FactoryBean 接口  FactoryBean 用来修饰普通bean ,变成了一个特殊的Bean
+				// context.getBean("bean")的时候会执行FactoryBean 的getObject方法,
+				// 可以context.getBean("&bean") 接触这种问题
 				if (isFactoryBean(beanName)) {
 					Object bean = getBean(FACTORY_BEAN_PREFIX + beanName);
 					if (bean instanceof FactoryBean) {

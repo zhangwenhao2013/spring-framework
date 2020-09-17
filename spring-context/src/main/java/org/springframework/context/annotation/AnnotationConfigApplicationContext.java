@@ -64,6 +64,7 @@ public class AnnotationConfigApplicationContext extends GenericApplicationContex
 	 */
 	public AnnotationConfigApplicationContext() {
 		this.reader = new AnnotatedBeanDefinitionReader(this);
+		// 这个scanner 不是真正去扫描我们bean的  而是提供给我们手动调用的 context.scan("xxx.xxx");
 		this.scanner = new ClassPathBeanDefinitionScanner(this);
 	}
 
@@ -84,8 +85,12 @@ public class AnnotationConfigApplicationContext extends GenericApplicationContex
 	 * {@link Configuration @Configuration} classes
 	 */
 	public AnnotationConfigApplicationContext(Class<?>... componentClasses) {
+		// 调用构造函数  1:创建BeanFactory(Registry)  2: BeanDefinitionReader 3: BeanDefinitionScanner
 		this();
+		//注册Bean
 		register(componentClasses);
+
+		//刷新(!!!!重点!!!!)
 		refresh();
 	}
 
