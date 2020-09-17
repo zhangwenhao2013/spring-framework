@@ -133,6 +133,7 @@ class DisposableBeanAdapter implements DisposableBean, Runnable, Serializable {
 			}
 			this.destroyMethod = destroyMethod;
 		}
+		//9 :DestructionAwareBeanPostProcessor 后置处理器介入 用来处理销毁的
 		this.beanPostProcessors = filterPostProcessors(postProcessors, bean);
 	}
 
