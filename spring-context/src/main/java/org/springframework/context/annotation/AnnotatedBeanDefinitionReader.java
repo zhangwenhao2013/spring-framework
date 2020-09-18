@@ -289,9 +289,9 @@ public class AnnotatedBeanDefinitionReader {
 		}
 		//将一个配置类处理成 处理成一个BeanDefinitionHolder
 		BeanDefinitionHolder definitionHolder = new BeanDefinitionHolder(abd, beanName);
-
+		//处理 @Scope ScopedProxyMode proxyMode() default ScopedProxyMode.DEFAULT; 的逻辑
 		definitionHolder = AnnotationConfigUtils.applyScopedProxyMode(scopeMetadata, definitionHolder, this.registry);
-		//注册工具  去完成Bean的注册
+		//将Config类BeanDefinition 注册到BeanDefinitionMap
 		BeanDefinitionReaderUtils.registerBeanDefinition(definitionHolder, this.registry);
 	}
 

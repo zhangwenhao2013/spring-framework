@@ -14,35 +14,22 @@
 
 package com.iz.study.pojo;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 /**
  * @author zhangwenhao
- * @since 2020/7/31
+ * @since 2020/9/18
  */
-
 @Component
-public class User {
-	private String name = "zzz";
+public class Phone {
 
-	@Autowired
-	private Phone phone;
+	private String phoneNum = "111";
 
-	public String getName() {
-		return name;
+	public String getPhoneNum() {
+		return phoneNum;
 	}
 
-	public void setName(String name) {
-		this.name = name;
-	}
-
-	public Phone getPhone() {
-		return phone;
-	}
-
-	public void setPhone(Phone phone) {
-		this.phone = phone;
+	public void setPhoneNum(String phoneNum) {
+		this.phoneNum = phoneNum;
 	}
 }

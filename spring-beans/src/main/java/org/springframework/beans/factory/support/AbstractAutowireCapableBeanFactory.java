@@ -507,6 +507,7 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 
 		try {
 			// Give BeanPostProcessors a chance to return a proxy instead of the target bean instance.
+			// 1:   InstantiationAwareBeanPostProcessor  实例化之前  如果启用了后置处理器介入的 实例化 直接返回结果
 			Object bean = resolveBeforeInstantiation(beanName, mbdToUse);
 			//如果 有后置处理器 返回了bean  就直接返回
 			if (bean != null) {
@@ -602,9 +603,9 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 		// Initialize the bean instance.
 		Object exposedObject = bean;
 		try {
-			//5: 进行属性赋值 ( 也会调用后置处理器 )
+			//5 & 6 : 进行属性赋值 ( 也会调用后置处理器 )
 			populateBean(beanName, mbd, instanceWrapper);
-			//6 : 初始化bean
+			//7 & 8  : 初始化bean
 			exposedObject = initializeBean(beanName, exposedObject, mbd);
 		}
 		catch (Throwable ex) {
@@ -646,7 +647,7 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 
 		// Register bean as disposable.
 		try {
-			//9 :
+			// 9  后置处理器:
 			registerDisposableBeanIfNecessary(beanName, bean, mbd);
 		}
 		catch (BeanDefinitionValidationException ex) {
@@ -1151,7 +1152,7 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 	protected Object applyBeanPostProcessorsBeforeInstantiation(Class<?> beanClass, String beanName) {
 		for (BeanPostProcessor bp : getBeanPostProcessors()) {
 			if (bp instanceof InstantiationAwareBeanPostProcessor) {
-				//第一个后置处理器 调用执行
+				// InstantiationAwareBeanPostProcessor  BeanPostProcessor  后置处理器介入 ()
 				InstantiationAwareBeanPostProcessor ibp = (InstantiationAwareBeanPostProcessor) bp;
 				Object result = ibp.postProcessBeforeInstantiation(beanClass, beanName);
 				if (result != null) {
@@ -1213,7 +1214,7 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 		}
 
 		// Candidate constructors for autowiring?
-		// 确定构造器的  ( 可以由后置处理器 干预)
+		// 2: 确定构造器的  ( 可以由后置处理器 干预)
 		Constructor<?>[] ctors = determineConstructorsFromBeanPostProcessors(beanClass, beanName);
 
 		if (ctors != null || mbd.getResolvedAutowireMode() == AUTOWIRE_CONSTRUCTOR ||
@@ -1418,7 +1419,6 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 		}
 
 		//通过 MutablePropertyValues PropertyValues
-		// 5: 后置处理器 介入给属性赋值
 		PropertyValues pvs = (mbd.hasPropertyValues() ? mbd.getPropertyValues() : null);
 
 		// 判断装配方式( 名字 / 类型) 可以通过BeanDefinition.setAutowireMode
@@ -1445,7 +1445,7 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 				pvs = mbd.getPropertyValues();
 			}
 			for (BeanPostProcessor bp : getBeanPostProcessors()) {
-				// 5: InstantiationAwareBeanPostProcessor 后置处理器
+				// 6: InstantiationAwareBeanPostProcessor 后置处理器
 				// @Autowired 是通过 AutowiredAnnotationBeanPostProcessor -->InstantiationAwareBeanPostProcessorAdapter
 				// -->SmartInstantiationAwareBeanPostProcessor-->InstantiationAwareBeanPostProcessor
 				// 所以这里 显示 InstantiationAwareBeanPostProcessor  后置处理器来处理 @Autowired

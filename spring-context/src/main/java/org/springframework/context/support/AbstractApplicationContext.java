@@ -580,16 +580,29 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 				postProcessBeanFactory(beanFactory);
 				// ioc
 				// 解析@ComponentScan @Component @Bean  @Import 等 解析Bean definition (ConfigurationClassPostProcessor)
+				// 调用 BeanDefinitionRegistryPostProcessor 后置处理器, 运行介入修改 修改BeanDefinition
 				// Invoke factory processors registered as beans in the context.
 				invokeBeanFactoryPostProcessors(beanFactory);
 
-	 			// Register bean processors that intercept bean creation. // 注册bean的后置处理器
+				// 注册bean的后置处理器(  分类, 有序的注册到 CopyOnWriteArrayList )
+				// Register bean processors that intercept bean creation.
 				registerBeanPostProcessors(beanFactory);
 
-				// Initialize message source for this context. //初始化 国际化信息
+				/**
+				 * 到这里为止
+				 * BeanFactory(  Definition &  PostProcessor 已经就位)
+				 * Bean(  Definition &  PostProcessor 已经就位)
+				 *
+				 * 此时 对象都只是处于 Definition 的状态 还未真正的创建
+				 *
+				 */
+
+				// 初始化 国际化信息
+				// Initialize message source for this context.
 				initMessageSource();
 
-				// Initialize event multicaster for this context. // 初始化事件
+				// 初始化事件
+				// Initialize event multicaster for this context.
 				initApplicationEventMulticaster();
 
 				// Initialize other special beans in specific context subclasses.
@@ -915,7 +928,6 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 		// Initialize LoadTimeWeaverAware beans early to allow for registering their transformers early.
 		String[] weaverAwareNames = beanFactory.getBeanNamesForType(LoadTimeWeaverAware.class, false, false);
 		for (String weaverAwareName : weaverAwareNames) {
-			// 循环生产bean
 			getBean(weaverAwareName);
 		}
 
@@ -923,9 +935,11 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 		beanFactory.setTempClassLoader(null);
 
 		// Allow for caching all bean definition metadata, not expecting further changes.
+		// 修改标记configurationFrozen  冻结bean(标记)
 		beanFactory.freezeConfiguration();
 
 		// Instantiate all remaining (non-lazy-init) singletons.
+		// 实例化 非懒加载的单例
 		beanFactory.preInstantiateSingletons();
 	}
 
