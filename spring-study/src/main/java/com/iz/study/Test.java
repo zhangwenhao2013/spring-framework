@@ -26,8 +26,8 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 public class Test {
 
 	public static void main(String[] args) {
-		ApplicationContext context = new ClassPathXmlApplicationContext("classpath:Spring-study.xml");
-		ApplicationContext context1 = new AnnotationConfigApplicationContext(Config.class);
+//		ApplicationContext context = new ClassPathXmlApplicationContext("classpath:Spring-study.xml");
+		ApplicationContext context = new AnnotationConfigApplicationContext(Config.class);
 		User bean = context.getBean(User.class);
 		System.out.println(bean);
 	}
