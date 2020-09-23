@@ -271,15 +271,19 @@ public class ConfigurationClassPostProcessor implements BeanDefinitionRegistryPo
 	 */
 	public void processConfigBeanDefinitions(BeanDefinitionRegistry registry) {
 		List<BeanDefinitionHolder> configCandidates = new ArrayList<>();
+		//获取  bean  定义()
 		String[] candidateNames = registry.getBeanDefinitionNames();
 
 		for (String beanName : candidateNames) {
+
+			// 获取 bean定义实例
 			BeanDefinition beanDef = registry.getBeanDefinition(beanName);
 			if (beanDef.getAttribute(ConfigurationClassUtils.CONFIGURATION_CLASS_ATTRIBUTE) != null) {
 				if (logger.isDebugEnabled()) {
 					logger.debug("Bean definition has already been processed as a configuration class: " + beanDef);
 				}
 			}
+			//
 			else if (ConfigurationClassUtils.checkConfigurationClassCandidate(beanDef, this.metadataReaderFactory)) {
 				configCandidates.add(new BeanDefinitionHolder(beanDef, beanName));
 			}
@@ -321,10 +325,13 @@ public class ConfigurationClassPostProcessor implements BeanDefinitionRegistryPo
 				this.metadataReaderFactory, this.problemReporter, this.environment,
 				this.resourceLoader, this.componentScanBeanNameGenerator, registry);
 
+
 		Set<BeanDefinitionHolder> candidates = new LinkedHashSet<>(configCandidates);
 		Set<ConfigurationClass> alreadyParsed = new HashSet<>(configCandidates.size());
 		do {
-			// 关键代码 : 解析
+			/**
+			 * 关键代码 : 解析
+ 			 */
 			parser.parse(candidates);
 			parser.validate();
 

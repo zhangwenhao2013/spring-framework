@@ -90,11 +90,18 @@ abstract class ConfigurationClassUtils {
 		}
 
 		AnnotationMetadata metadata;
+
 		if (beanDef instanceof AnnotatedBeanDefinition &&
 				className.equals(((AnnotatedBeanDefinition) beanDef).getMetadata().getClassName())) {
 			// Can reuse the pre-parsed metadata from the given BeanDefinition...
 			metadata = ((AnnotatedBeanDefinition) beanDef).getMetadata();
 		}
+		/**
+		 * 前面在创建reader的时候 添加的 6个必要的postprocess  都被创造成 RootBeanDefinition 类型添加到
+		 * bean定义集合中
+		 *
+		 * RootBeanDefinition 是 AbstractBeanDefinition 实现类
+		 */
 		else if (beanDef instanceof AbstractBeanDefinition && ((AbstractBeanDefinition) beanDef).hasBeanClass()) {
 			// Check already loaded Class if present...
 			// since we possibly can't even load the class file for this Class.

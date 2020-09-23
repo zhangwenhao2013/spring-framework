@@ -862,6 +862,9 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
 				// 是不是是实现了  FactoryBean 接口  FactoryBean 用来修饰普通bean ,变成了一个特殊的Bean
 				// context.getBean("bean")的时候会执行FactoryBean 的getObject方法,
 				// 可以context.getBean("&bean") 接触这种问题
+				/**
+				 * bean  是否实现了  FactoryBean
+				 */
 				if (isFactoryBean(beanName)) {
 					Object bean = getBean(FACTORY_BEAN_PREFIX + beanName);
 					if (bean instanceof FactoryBean) {
@@ -879,11 +882,17 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
 							isEagerInit = (factory instanceof SmartFactoryBean &&
 									((SmartFactoryBean<?>) factory).isEagerInit());
 						}
+						/**
+						 * 是否需要立马初始化
+						 */
 						if (isEagerInit) {
 							getBean(beanName);
 						}
 					}
 				}
+				/**
+				 * 普通bean
+				 */
 				else {
 					getBean(beanName);
 				}

@@ -56,6 +56,7 @@ final class PostProcessorRegistrationDelegate {
 			ConfigurableListableBeanFactory beanFactory, List<BeanFactoryPostProcessor> beanFactoryPostProcessors) {
 
 		// Invoke BeanDefinitionRegistryPostProcessors first, if any.   // 一开始 beanFactoryPostProcessors 是空的
+
 		Set<String> processedBeans = new HashSet<>();
 		// 不管是Applicationcontext 还是 beanFactory 都实现了BeanDefinitionRegistry  可能是为了其他情况做过滤
 		if (beanFactory instanceof BeanDefinitionRegistry) {
@@ -64,7 +65,10 @@ final class PostProcessorRegistrationDelegate {
 			List<BeanDefinitionRegistryPostProcessor> registryProcessors = new ArrayList<>();
 
 			for (BeanFactoryPostProcessor postProcessor : beanFactoryPostProcessors) {
-				// AnnotationDefinitionReader 中 注册的 ConfigurationClassPostProcessor 是 BeanDefinitionRegistryPostProcessor实现类
+				// AnnotationDefinitionReader 中 注册的 ConfigurationClassPostProcessor 是 BeanDefinitionRegistryPostProcessor实现
+				/**
+				 * 此处的目的 应该是为了 手动添加到 beanFactoryPostProcessors list集合中的 BeanDefinitionRegistryPostProcessor
+				 */
 				if (postProcessor instanceof BeanDefinitionRegistryPostProcessor) {
 					// BeanDefinitionRegistryPostProcessor 后置处理器调用
 					BeanDefinitionRegistryPostProcessor registryProcessor =
@@ -77,6 +81,12 @@ final class PostProcessorRegistrationDelegate {
 				}
 			}
 
+			/**
+			 *  下面是有优先级的执行接口方法
+			 *  首先 getBean 实例
+			 *  之后 BeanDefinitionRegistryPostProcessor 接口方法
+			 *  其次 BeanFactoryPostProcessor 接口方法
+			 */
 			// Do not initialize FactoryBeans here: We need to leave all regular beans
 			// uninitialized to let the bean factory post-processors apply to them!
 			// Separate between BeanDefinitionRegistryPostProcessors that implement

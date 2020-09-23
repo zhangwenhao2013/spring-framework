@@ -48,9 +48,9 @@ import org.springframework.util.StringUtils;
  * @author Chris Beams
  * @author Juergen Hoeller
  * @author Sam Brannen
- * @since 3.1
  * @see ClassPathBeanDefinitionScanner#scan(String...)
  * @see ComponentScanBeanDefinitionParser
+ * @since 3.1
  */
 class ComponentScanAnnotationParser {
 
@@ -64,7 +64,7 @@ class ComponentScanAnnotationParser {
 
 
 	public ComponentScanAnnotationParser(Environment environment, ResourceLoader resourceLoader,
-			BeanNameGenerator beanNameGenerator, BeanDefinitionRegistry registry) {
+										 BeanNameGenerator beanNameGenerator, BeanDefinitionRegistry registry) {
 
 		this.environment = environment;
 		this.resourceLoader = resourceLoader;
@@ -74,7 +74,10 @@ class ComponentScanAnnotationParser {
 
 
 	public Set<BeanDefinitionHolder> parse(AnnotationAttributes componentScan, final String declaringClass) {
-		// 解析配置类的时候  会单独创建 scanner 和applicationcontext 创建时的scanner 不一样
+		/**
+		 * 解析config 类的时候  会单独创建 scanner
+		 * 和 applicationcontext 创建时的scanner 不一样 这个scanner 是为了给自己手动调用scanner的
+		 */
 		ClassPathBeanDefinitionScanner scanner = new ClassPathBeanDefinitionScanner(this.registry,
 				componentScan.getBoolean("useDefaultFilters"), this.environment, this.resourceLoader);
 
@@ -86,14 +89,16 @@ class ComponentScanAnnotationParser {
 		ScopedProxyMode scopedProxyMode = componentScan.getEnum("scopedProxy");
 		if (scopedProxyMode != ScopedProxyMode.DEFAULT) {
 			scanner.setScopedProxyMode(scopedProxyMode);
-		}
-		else {
+		} else {
 			Class<? extends ScopeMetadataResolver> resolverClass = componentScan.getClass("scopeResolver");
 			scanner.setScopeMetadataResolver(BeanUtils.instantiateClass(resolverClass));
 		}
 
 		scanner.setResourcePattern(componentScan.getString("resourcePattern"));
 
+		/**
+		 * 扫描过滤条件
+		 */
 		for (AnnotationAttributes filter : componentScan.getAnnotationArray("includeFilters")) {
 			for (TypeFilter typeFilter : typeFiltersFor(filter)) {
 				scanner.addIncludeFilter(typeFilter);
@@ -111,7 +116,10 @@ class ComponentScanAnnotationParser {
 		}
 
 		Set<String> basePackages = new LinkedHashSet<>();
-		// 获取到要扫描的路径
+
+		/**
+		 * 获取到要扫描的路径
+		 */
 		String[] basePackagesArray = componentScan.getStringArray("basePackages");
 		for (String pkg : basePackagesArray) {
 			String[] tokenized = StringUtils.tokenizeToStringArray(this.environment.resolvePlaceholders(pkg),
@@ -131,7 +139,9 @@ class ComponentScanAnnotationParser {
 				return declaringClass.equals(className);
 			}
 		});
-		// 执行扫描
+		/**
+		 * 执行扫描
+		 */
 		return scanner.doScan(StringUtils.toStringArray(basePackages));
 	}
 
