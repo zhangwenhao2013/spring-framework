@@ -316,6 +316,9 @@ public abstract class AbstractAutoProxyCreator extends ProxyProcessorSupport
 	 */
 	protected Object getCacheKey(Class<?> beanClass, @Nullable String beanName) {
 		if (StringUtils.hasLength(beanName)) {
+			/**
+			 * 如果是  FactoryBean  则添加 '&'  保证从容器中获取的bean 是原bean  而不是FactoryBean.getObject获取的Bean
+			 */
 			return (FactoryBean.class.isAssignableFrom(beanClass) ?
 					BeanFactory.FACTORY_BEAN_PREFIX + beanName : beanName);
 		}
