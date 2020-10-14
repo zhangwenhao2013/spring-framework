@@ -55,13 +55,20 @@ final class PostProcessorRegistrationDelegate {
 	public static void invokeBeanFactoryPostProcessors(
 			ConfigurableListableBeanFactory beanFactory, List<BeanFactoryPostProcessor> beanFactoryPostProcessors) {
 
-		// Invoke BeanDefinitionRegistryPostProcessors first, if any.   // 一开始 beanFactoryPostProcessors 是空的
+		// Invoke BeanDefinitionRegistryPostProcessors first, if any.
+		// 一开始 beanFactoryPostProcessors 是空的
 
 		Set<String> processedBeans = new HashSet<>();
 		// 不管是Applicationcontext 还是 beanFactory 都实现了BeanDefinitionRegistry  可能是为了其他情况做过滤
 		if (beanFactory instanceof BeanDefinitionRegistry) {
 			BeanDefinitionRegistry registry = (BeanDefinitionRegistry) beanFactory;
+			/**
+			 * 常规的 后置处理器 容器
+			 */
 			List<BeanFactoryPostProcessor> regularPostProcessors = new ArrayList<>();
+			/**
+			 * registry 后置处理器 容器
+			 */
 			List<BeanDefinitionRegistryPostProcessor> registryProcessors = new ArrayList<>();
 
 			for (BeanFactoryPostProcessor postProcessor : beanFactoryPostProcessors) {
@@ -108,6 +115,7 @@ final class PostProcessorRegistrationDelegate {
 			registryProcessors.addAll(currentRegistryProcessors);
 			// invokeBeanDefinitionRegistryPostProcessors 执行 解析 扫描 ,并注册到BeanDefinitionMap
 			//  ConfigurationClassPostProcessor后置处理器  依次执行了 parse  dosacan  regestry
+			//postProcessBeanDefinitionRegistry
 			invokeBeanDefinitionRegistryPostProcessors(currentRegistryProcessors, registry);
 			currentRegistryProcessors.clear();
 
@@ -146,6 +154,7 @@ final class PostProcessorRegistrationDelegate {
 
 			// 最终执行 postProcessBeanFactory( 至此 BeanFactoryPostProcessor 自己以及子接口的方法 全部执行完毕)
 			// Now, invoke the postProcessBeanFactory callback of all processors handled so far.
+			//postProcessBeanFactory
 			invokeBeanFactoryPostProcessors(registryProcessors, beanFactory);
 			invokeBeanFactoryPostProcessors(regularPostProcessors, beanFactory);
 		} else {
