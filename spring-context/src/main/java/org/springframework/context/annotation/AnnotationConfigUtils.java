@@ -159,6 +159,17 @@ public abstract class AnnotationConfigUtils {
 			}
 		}
 
+		/**
+		 * ConfigurationClassPostProcessor
+		 * AutowiredAnnotationBeanPostProcessor
+		 *
+		 * CommonAnnotationBeanPostProcessor
+		 * PersistenceAnnotationBeanPostProcessor
+		 *
+		 * EventListenerMethodProcessor
+		 * DefaultEventListenerFactory
+		 */
+
 		Set<BeanDefinitionHolder> beanDefs = new LinkedHashSet<>(8);
 
 		// 重要 ConfigurationClassPostProcessor  隶属于 BeanFactoryPostProcessor 用来解析 @Component Scan @Configuration

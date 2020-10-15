@@ -72,7 +72,7 @@ final class PostProcessorRegistrationDelegate {
 			List<BeanDefinitionRegistryPostProcessor> registryProcessors = new ArrayList<>();
 
 			for (BeanFactoryPostProcessor postProcessor : beanFactoryPostProcessors) {
-				// AnnotationDefinitionReader 中 注册的 ConfigurationClassPostProcessor 是 BeanDefinitionRegistryPostProcessor实现
+
 				/**
 				 * 此处的目的 应该是为了 手动添加到 beanFactoryPostProcessors list集合中的 BeanDefinitionRegistryPostProcessor
 				 */
@@ -89,6 +89,18 @@ final class PostProcessorRegistrationDelegate {
 			}
 
 			/**
+			 * ConfigurationClassPostProcessor
+			 * AutowiredAnnotationBeanPostProcessor
+			 *
+			 * CommonAnnotationBeanPostProcessor
+			 * PersistenceAnnotationBeanPostProcessor
+			 *
+			 * EventListenerMethodProcessor
+			 * DefaultEventListenerFactory
+			 */
+
+          // AnnotationDefinitionReader 中 注册的 ConfigurationClassPostProcessor 是 BeanDefinitionRegistryPostProcessor实现
+			/**
 			 *  下面是有优先级的执行接口方法
 			 *  首先 getBean 实例
 			 *  之后 BeanDefinitionRegistryPostProcessor 接口方法
@@ -103,6 +115,11 @@ final class PostProcessorRegistrationDelegate {
 			// 分类执行postProcessBeanDefinitionRegistry ( 优先执行 优先级高的 能匹配上 PriorityOrdered)
 			// doGetBeanNamesForType 从BeandefinitionMap 中获取
 			// First, invoke the BeanDefinitionRegistryPostProcessors that implement PriorityOrdered.
+
+
+			/**
+			 * ConfigurationClassPostProcessor 满足条件
+			 */
 			String[] postProcessorNames =
 					beanFactory.getBeanNamesForType(BeanDefinitionRegistryPostProcessor.class, true, false);
 			for (String ppName : postProcessorNames) {
@@ -166,6 +183,7 @@ final class PostProcessorRegistrationDelegate {
 
 		// 如果是不是 Applicationcontext 以及 BeanFactory 这种实现了BeanDefinitionRegistry的 普通BeanFactory
 		// 也需要完成后置处理器的方法  postProcessBeanFactory  也需要根据分类 (  优先级 , 顺序, 无顺序)
+
 		// Do not initialize FactoryBeans here: We need to leave all regular beans
 		// uninitialized to let the bean factory post-processors apply to them!
 		String[] postProcessorNames =
