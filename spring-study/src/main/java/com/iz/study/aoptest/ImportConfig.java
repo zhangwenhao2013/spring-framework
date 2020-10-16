@@ -12,24 +12,22 @@
  *
  */
 
-package com.iz.study.pojo;
+package com.iz.study.aoptest;
 
+import com.iz.study.pojo.Phone;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Component;
 
 /**
  * @author zhangwenhao
- * @since 2020/9/18
+ * @since 2020/10/16
  */
-//@Component
-public class Phone {
+@Component
+public class ImportConfig {
 
-	private String phoneNum = "111";
-
-	public String getPhoneNum() {
-		return phoneNum;
-	}
-
-	public void setPhoneNum(String phoneNum) {
-		this.phoneNum = phoneNum;
+	@Bean
+	public Phone getPhone(){
+		return new Phone();
 	}
 }

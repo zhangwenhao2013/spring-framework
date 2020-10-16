@@ -22,12 +22,14 @@ import org.springframework.aop.support.NameMatchMethodPointcutAdvisor;
 import org.springframework.aop.support.RegexpMethodPointcutAdvisor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
 
 /**
  * @author zhangwenhao
  * @since 2020/9/27
  */
 @Configuration
+@Import({ImportConfig.class})
 public class BeanConfig {
 	@Bean
 	public Calculate getMyCalculate() {

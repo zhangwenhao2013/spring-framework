@@ -166,6 +166,10 @@ class ConfigurationClassParser {
 		for (BeanDefinitionHolder holder : configCandidates) {
 			BeanDefinition bd = holder.getBeanDefinition();
 			try {
+				/**
+				 *   Config class  :AnnotatedGenericBeanDefinition  实现了  AnnotatedBeanDefinition  接口
+				 *   Base Class 6个:RootBeanDefinition                  是 AbstractBeanDefinition 实现类
+				 */
 				if (bd instanceof AnnotatedBeanDefinition) {
 					/**
 					 * 解析配置类
@@ -173,6 +177,9 @@ class ConfigurationClassParser {
 					parse(((AnnotatedBeanDefinition) bd).getMetadata(), holder.getBeanName());
 				}
 				else if (bd instanceof AbstractBeanDefinition && ((AbstractBeanDefinition) bd).hasBeanClass()) {
+					/**
+					 * spring 顶级 base class
+					 */
 					parse(((AbstractBeanDefinition) bd).getBeanClass(), holder.getBeanName());
 				}
 				else {
@@ -221,6 +228,8 @@ class ConfigurationClassParser {
 
 
 	protected void processConfigurationClass(ConfigurationClass configClass) throws IOException {
+
+		// 是否需要跳过   取决于  @Conditional
 		if (this.conditionEvaluator.shouldSkip(configClass.getMetadata(), ConfigurationPhase.PARSE_CONFIGURATION)) {
 			return;
 		}
@@ -242,6 +251,9 @@ class ConfigurationClassParser {
 			}
 		}
 
+		/**
+		 * 递归调用处理 Config class  依次是 本类---> 父类
+		 */
 		// Recursively process the configuration class and its superclass hierarchy.
 		SourceClass sourceClass = asSourceClass(configClass);
 		do {

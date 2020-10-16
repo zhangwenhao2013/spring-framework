@@ -14,6 +14,7 @@
 
 package com.iz.study.aoptest;
 
+import com.iz.study.pojo.Phone;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
 /**
@@ -42,13 +43,15 @@ public class Test {
 		calculate.sub(1, 9);*/
 
 
-		Calculate calculate = context.getBean("getMyCalculate", Calculate.class);
-		calculate.add(1, 9);
+//		Calculate calculate = context.getBean("getMyCalculate", Calculate.class);
+//		calculate.add(1, 9);
+//
+//		System.out.println("============");
+//
+//		calculate.sub(1, 9);
 
-		System.out.println("============");
-
-		calculate.sub(1, 9);
-
+		Phone phone = (Phone) context.getBean(Phone.class);
+		System.out.println(phone.getPhoneNum());
 
 
 	}
