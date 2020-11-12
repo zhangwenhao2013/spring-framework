@@ -50,7 +50,7 @@ public class Test {
 //
 //		calculate.sub(1, 9);
 
-		Phone phone = (Phone) context.getBean(Phone.class);
+		Phone phone = context.getBean(Phone.class);
 		System.out.println(phone.getPhoneNum());
 
 
