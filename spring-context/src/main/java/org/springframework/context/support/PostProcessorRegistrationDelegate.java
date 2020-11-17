@@ -60,6 +60,9 @@ final class PostProcessorRegistrationDelegate {
 
 		Set<String> processedBeans = new HashSet<>();
 		// 不管是Applicationcontext 还是 beanFactory 都实现了BeanDefinitionRegistry  可能是为了其他情况做过滤
+		/**
+		 * DefaultListableBeanFactory   beanFactory
+		 */
 		if (beanFactory instanceof BeanDefinitionRegistry) {
 			BeanDefinitionRegistry registry = (BeanDefinitionRegistry) beanFactory;
 			/**

@@ -959,6 +959,9 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
 		Assert.hasText(beanName, "Bean name must not be empty");
 		Assert.notNull(beanDefinition, "BeanDefinition must not be null");
 
+		/**
+		 * AnnotatedGenericBeanDefinition 是AbstractBeanDefinition的子类
+		 */
 		if (beanDefinition instanceof AbstractBeanDefinition) {
 			try {
 				((AbstractBeanDefinition) beanDefinition).validate();
@@ -968,7 +971,9 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
 			}
 		}
 
-		//从BeanDefinition 容器中获取
+		/**
+		 * 从BeanDefinition 容器中获取
+		 */
 		BeanDefinition existingDefinition = this.beanDefinitionMap.get(beanName);
 		if (existingDefinition != null) {
 			if (!isAllowBeanDefinitionOverriding()) {
@@ -999,7 +1004,6 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
 				/**
 				 * 将 bean definition 存储到  beanDefinitionMap  中
 				 * 以及 保存 在 beanDefinitionNames 中
-				 *
 				 */
 				// Cannot modify startup-time collection elements anymore (for stable iteration)
 				synchronized (this.beanDefinitionMap) {
@@ -1019,6 +1023,9 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
 			this.frozenBeanDefinitionNames = null;
 		}
 
+		/**
+		 * 重置 beanName 对应的BeanDefinition 以及 该类的子类
+		 */
 		if (existingDefinition != null || containsSingleton(beanName)) {
 			resetBeanDefinition(beanName);
 		}

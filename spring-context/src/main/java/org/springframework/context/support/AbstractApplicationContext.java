@@ -568,10 +568,15 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 			prepareRefresh();
 
 			// Tell the subclass to refresh the internal bean factory.
-			//获取applicationcontext 的 BeanFactory
+			//获取applicationcontext 的 BeanFactory   ---- DefaultListableBeanFactory(注解方式)
 			ConfigurableListableBeanFactory beanFactory = obtainFreshBeanFactory();
 
 			// Prepare the bean factory for use in this context.
+			/**
+			 * 其中有2个后置处理器 实例化的!!!! ApplicationContextAwareProcessor 和 ApplicationListenerDetector
+			 *
+			 * 不是 后置处理器的 BeanDefinition
+			 */
 			prepareBeanFactory(beanFactory);
 
 			try {
@@ -644,6 +649,10 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 	protected void prepareRefresh() {
 		// Switch to active.
 		this.startupDate = System.currentTimeMillis();
+
+		/**
+		 * 设计标记  标记 context :关起门来造bean
+		 */
 		this.closed.set(false);
 		this.active.set(true);
 
@@ -707,10 +716,16 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 	protected void prepareBeanFactory(ConfigurableListableBeanFactory beanFactory) {
 		// Tell the internal bean factory to use the context's class loader etc.
 		beanFactory.setBeanClassLoader(getClassLoader());
+		/**
+		 * 设置 解析表达式的解析器  SpelExpressionParser spel表达式
+		 */
 		beanFactory.setBeanExpressionResolver(new StandardBeanExpressionResolver(beanFactory.getBeanClassLoader()));
 		beanFactory.addPropertyEditorRegistrar(new ResourceEditorRegistrar(this, getEnvironment()));
 
 		// Configure the bean factory with context callbacks.
+		/**
+		 * 注册 一个 后置处理器 实例化的 ApplicationContextAwareProcessor
+		 */
 		beanFactory.addBeanPostProcessor(new ApplicationContextAwareProcessor(this));
 		beanFactory.ignoreDependencyInterface(EnvironmentAware.class);
 		beanFactory.ignoreDependencyInterface(EmbeddedValueResolverAware.class);
@@ -727,6 +742,9 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 		beanFactory.registerResolvableDependency(ApplicationContext.class, this);
 
 		// Register early post-processor for detecting inner beans as ApplicationListeners.
+		/**
+		 * 注册 一个 后置处理器 ApplicationListenerDetector
+		 */
 		beanFactory.addBeanPostProcessor(new ApplicationListenerDetector(this));
 
 		// Detect a LoadTimeWeaver and prepare for weaving, if found.

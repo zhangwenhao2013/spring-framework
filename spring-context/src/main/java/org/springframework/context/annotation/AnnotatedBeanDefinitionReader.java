@@ -251,6 +251,9 @@ public class AnnotatedBeanDefinitionReader {
 			@Nullable Class<? extends Annotation>[] qualifiers, @Nullable Supplier<T> supplier,
 			@Nullable BeanDefinitionCustomizer[] customizers) {
 
+		/**
+		 * 注解类的config配置类 创建成一个BeanDefinition类
+		 */
 		AnnotatedGenericBeanDefinition abd = new AnnotatedGenericBeanDefinition(beanClass);
 		//是否 跳过( 条件注解 )
 		if (this.conditionEvaluator.shouldSkip(abd.getMetadata())) {
@@ -271,12 +274,15 @@ public class AnnotatedBeanDefinitionReader {
 
 		if (qualifiers != null) {
 			for (Class<? extends Annotation> qualifier : qualifiers) {
+				// 优先级
 				if (Primary.class == qualifier) {
 					abd.setPrimary(true);
 				}
+				// 懒加载
 				else if (Lazy.class == qualifier) {
 					abd.setLazyInit(true);
 				}
+				// 限定(指定哪个注入)
 				else {
 					abd.addQualifier(new AutowireCandidateQualifier(qualifier));
 				}
