@@ -59,7 +59,7 @@ final class PostProcessorRegistrationDelegate {
 		// 一开始 beanFactoryPostProcessors 是空的
 
 		Set<String> processedBeans = new HashSet<>();
-		// 不管是Applicationcontext 还是 beanFactory 都实现了BeanDefinitionRegistry  可能是为了其他情况做过滤
+		// 不管是Applicationcontext 还是 beanFactory(DefaultListableBeanFactory) 都实现了BeanDefinitionRegistry  可能是为了其他情况做过滤
 		/**
 		 * DefaultListableBeanFactory   beanFactory
 		 */
@@ -92,17 +92,20 @@ final class PostProcessorRegistrationDelegate {
 			}
 
 			/**
-			 * ConfigurationClassPostProcessor
-			 * AutowiredAnnotationBeanPostProcessor
+			 * ConfigurationClassPostProcessor (bdrpp)
+			 * AutowiredAnnotationBeanPostProcessor (bpp)
 			 *
-			 * CommonAnnotationBeanPostProcessor
-			 * PersistenceAnnotationBeanPostProcessor
+			 * CommonAnnotationBeanPostProcessor (bpp)
+			 * PersistenceAnnotationBeanPostProcessor (bpp)
 			 *
-			 * EventListenerMethodProcessor
+			 * EventListenerMethodProcessor  (bfpp)
 			 * DefaultEventListenerFactory
+			 *
+			 * ApplicationListenerDetector (bpp)
+			 * ApplicationContextAwareProcessor (bpp)
 			 */
 
-          // AnnotationDefinitionReader 中 注册的 ConfigurationClassPostProcessor 是 BeanDefinitionRegistryPostProcessor实现
+			// AnnotationDefinitionReader 中 注册的 ConfigurationClassPostProcessor 是 BeanDefinitionRegistryPostProcessor实现
 			/**
 			 *  下面是有优先级的执行接口方法
 			 *  首先 getBean 实例

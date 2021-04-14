@@ -172,13 +172,15 @@ class ConfigurationClassParser {
 				 */
 				if (bd instanceof AnnotatedBeanDefinition) {
 					/**
-					 * 解析配置类
+					 * 解析配置类 ( AnnotatedGenericBeanDefinition )
 					 */
 					parse(((AnnotatedBeanDefinition) bd).getMetadata(), holder.getBeanName());
 				}
 				else if (bd instanceof AbstractBeanDefinition && ((AbstractBeanDefinition) bd).hasBeanClass()) {
+
+					// TODO: 2021/4/13  什么时候回走这里呢?
 					/**
-					 * spring 顶级 base class
+					 * spring 顶级 base class  ( RootBeanDefinition )
 					 */
 					parse(((AbstractBeanDefinition) bd).getBeanClass(), holder.getBeanName());
 				}

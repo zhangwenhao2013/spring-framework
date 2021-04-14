@@ -274,6 +274,7 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 			if (isPrototypeCurrentlyInCreation(beanName)) {
 				throw new BeanCurrentlyInCreationException(beanName);
 			}
+			// TODO: 2021/4/14  parentBeanFactory 什么时候 != null
 			// 子父容器问题
 			// Check if bean definition exists in this factory.
 			BeanFactory parentBeanFactory = getParentBeanFactory();
@@ -1470,14 +1471,25 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 			throws CannotLoadBeanClassException {
 
 		try {
+			/**
+			 * 执行了beanFactory.getBeanNamesForType(xxx.class, true, false);
+			 * beanClass 才会赋值
+			 */
 			if (mbd.hasBeanClass()) {
 				return mbd.getBeanClass();
 			}
+			// TODO: 2021/4/14 ????
 			if (System.getSecurityManager() != null) {
 				return AccessController.doPrivileged((PrivilegedExceptionAction<Class<?>>) () ->
 					doResolveBeanClass(mbd, typesToMatch), getAccessControlContext());
 			}
 			else {
+				/**
+				 * 自己定义的 @Configuration 类未执行
+				 * beanFactory.getBeanNamesForType(xxx.class, true, false);
+				 *
+				 * doResolveBeanClass()内部也会对 beanClass 进行赋值 ,依旧有可能是null
+				 */
 				return doResolveBeanClass(mbd, typesToMatch);
 			}
 		}
