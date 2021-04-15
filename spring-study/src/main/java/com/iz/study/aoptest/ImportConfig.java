@@ -14,9 +14,8 @@
 
 package com.iz.study.aoptest;
 
-import com.iz.study.pojo.Phone;
+import com.iz.study.config.Phone;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Component;
 
 /**

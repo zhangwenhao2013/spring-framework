@@ -12,10 +12,9 @@
  *
  */
 
-package com.iz.study.pojo;
+package com.iz.study.config;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 /**

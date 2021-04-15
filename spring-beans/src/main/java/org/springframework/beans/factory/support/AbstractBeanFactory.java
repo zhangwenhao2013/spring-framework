@@ -304,10 +304,16 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 			}
 
 			try {
-				//获取合并的 BeanDefinition
+				/**
+				 * 获取合并的 BeanDefinition
+				 *
+				 * 单例无父类的话 只是设置了下作用域,和将beandefinition 添加到了mergedBeanDefinitions
+				 */
 				final RootBeanDefinition mbd = getMergedLocalBeanDefinition(beanName);
 				checkMergedBeanDefinition(mbd, beanName, args);
-				// @Dependson 注解  先加载依赖的bean
+				/**
+				 *  @Dependson 注解  先加载依赖的bean
+				 */
 				// Guarantee initialization of beans that the current bean depends on.
 				String[] dependsOn = mbd.getDependsOn();
 				if (dependsOn != null) {
@@ -327,7 +333,9 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 						}
 					}
 				}
-
+				/**
+				 * 创建实例
+				 */
 				// Create bean instance.
 				if (mbd.isSingleton()) {
 					// 把 Beanname 和 一个回调方法传入
@@ -1485,8 +1493,8 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 			}
 			else {
 				/**
-				 * 自己定义的 @Configuration 类未执行
-				 * beanFactory.getBeanNamesForType(xxx.class, true, false);
+				 * 自己定义的 @Configuration
+				 * 类未执行 beanFactory.getBeanNamesForType(xxx.class, true, false);
 				 *
 				 * doResolveBeanClass()内部也会对 beanClass 进行赋值 ,依旧有可能是null
 				 */

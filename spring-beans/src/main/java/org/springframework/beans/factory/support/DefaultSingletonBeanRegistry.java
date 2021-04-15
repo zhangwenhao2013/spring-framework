@@ -205,7 +205,7 @@ public class DefaultSingletonBeanRegistry extends SimpleAliasRegistry implements
 		synchronized (this.singletonObjects) {
 			// 先从一级缓存中获取
 			Object singletonObject = this.singletonObjects.get(beanName);
-			//获取不到
+			// 一级缓存中获取不到
 			if (singletonObject == null) {
 				if (this.singletonsCurrentlyInDestruction) {
 					throw new BeanCreationNotAllowedException(beanName,

@@ -12,7 +12,7 @@
  *
  */
 
-package com.iz.study.pojo;
+package com.iz.study.config;
 
 import org.springframework.stereotype.Component;
 
@@ -20,7 +20,7 @@ import org.springframework.stereotype.Component;
  * @author zhangwenhao
  * @since 2020/9/18
  */
-//@Component
+@Component
 public class Phone {
 
 	private String phoneNum = "111";

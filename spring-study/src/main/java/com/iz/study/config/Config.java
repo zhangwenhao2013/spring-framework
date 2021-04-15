@@ -12,7 +12,7 @@
  *
  */
 
-package com.iz.study;
+package com.iz.study.config;
 
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -22,6 +22,6 @@ import org.springframework.context.annotation.Configuration;
  * @since 2020/9/16
  */
 @Configuration
-@ComponentScan(value = "com.iz.study")
+@ComponentScan(value = "com.iz.study.config")
 public class Config {
 }
