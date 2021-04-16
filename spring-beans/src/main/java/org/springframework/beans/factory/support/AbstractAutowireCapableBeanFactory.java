@@ -520,7 +520,7 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 		}
 
 		try {
-			//Spring 去创建 bean( 实例化  填充属性  初始化 )
+			//Spring 去创建 bean( 实例化  填充属性  初始化 ) SmartInstantiationAwareBeanPostProcessor 可以干预
 			Object beanInstance = doCreateBean(beanName, mbdToUse, args);
 			if (logger.isTraceEnabled()) {
 				logger.trace("Finished creating instance of bean '" + beanName + "'");
@@ -560,8 +560,9 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 		if (mbd.isSingleton()) {
 			instanceWrapper = this.factoryBeanInstanceCache.remove(beanName);
 		}
+		// TODO: 2021/4/15  尝试用工厂 试试
 		if (instanceWrapper == null) {
-			//  2: 实例化( 反射 [无参构造,  有参构造] /  工厂 )
+			//  2: 实例化( 反射 [无参构造,  有参构造] /  工厂 ) SmartInstantiationAwareBeanPostProcessor 可以干预
 			instanceWrapper = createBeanInstance(beanName, mbd, args);
 		}
 		// 获取到实例对象 (但是还没经过属性赋值) : 装饰设计模式 Wrapper
@@ -575,7 +576,7 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 		synchronized (mbd.postProcessingLock) {
 			if (!mbd.postProcessed) {
 				try {
-					// 3: 运行后置处理器MergedBeanDefinitionPostProcessor 介入 处理: @Autowire 和 @Value
+					// 3: 运行后置处理器MergedBeanDefinitionPostProcessor 介入 A.root definition  B:处理: @Autowire 和 @Value
 					applyMergedBeanDefinitionPostProcessors(mbd, beanType, beanName);
 				}
 				catch (Throwable ex) {
@@ -596,7 +597,7 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 						"' to allow for resolving potential circular references");
 			}
 			//将 初始化好的  半成品Bean 添加到 一级缓存
-			// 4 : 可以有后置处理器介入
+			// 4 : 可以有后置处理器介入 SmartInstantiationAwareBeanPostProcessor
 			addSingletonFactory(beanName, () -> getEarlyBeanReference(beanName, mbd, bean));
 		}
 
@@ -1103,8 +1104,8 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 	 * @see MergedBeanDefinitionPostProcessor#postProcessMergedBeanDefinition
 	 */
 	protected void applyMergedBeanDefinitionPostProcessors(RootBeanDefinition mbd, Class<?> beanType, String beanName) {
-		for (BeanPostProcessor bp : getBeanPostProcessors()) {
-			if (bp instanceof MergedBeanDefinitionPostProcessor) {
+		for (BeanPostProcessor bp : getBeanPostProcessors()) {   // 1ApplicationListenerDetector 和 1ApplicationContextAwareProcessor
+			if (bp instanceof MergedBeanDefinitionPostProcessor) { // 1ApplicationListenerDetector
 				MergedBeanDefinitionPostProcessor bdp = (MergedBeanDefinitionPostProcessor) bp;
 				bdp.postProcessMergedBeanDefinition(mbd, beanType, beanName);
 			}
@@ -1189,7 +1190,7 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 			throw new BeanCreationException(mbd.getResourceDescription(), beanName,
 					"Bean class isn't public, and non-public access not allowed: " + beanClass.getName());
 		}
-
+		// TODO: 2021/4/15 尝试   Supplier  和   Factory 模式实例化
 		Supplier<?> instanceSupplier = mbd.getInstanceSupplier();
 		if (instanceSupplier != null) {
 			return obtainFromSupplier(instanceSupplier, beanName);
@@ -1828,6 +1829,7 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 		Object wrappedBean = bean;
 		if (mbd == null || !mbd.isSynthetic()) {
 			//7: 调用 后置处理器中调用 ApplicationContextPostProcess) 和  调用 @PostConstruct
+			// 构造  >  自动注入  > autowired > @PostConstruct
 			wrappedBean = applyBeanPostProcessorsBeforeInitialization(wrappedBean, beanName);
 		}
 
