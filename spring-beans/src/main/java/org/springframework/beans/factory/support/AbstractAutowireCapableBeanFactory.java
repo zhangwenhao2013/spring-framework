@@ -1458,7 +1458,7 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 				// 6: InstantiationAwareBeanPostProcessor 后置处理器
 				// @Autowired 是通过 AutowiredAnnotationBeanPostProcessor -->InstantiationAwareBeanPostProcessorAdapter
 				// -->SmartInstantiationAwareBeanPostProcessor-->InstantiationAwareBeanPostProcessor
-				// 所以这里 显示 InstantiationAwareBeanPostProcessor  后置处理器来处理 @Autowired
+				// 所以这里 显示 InstantiationAwareBeanPostProcessor  后置处理器来处理 @Autowired @Value
 				if (bp instanceof InstantiationAwareBeanPostProcessor) {
 					InstantiationAwareBeanPostProcessor ibp = (InstantiationAwareBeanPostProcessor) bp;
 					PropertyValues pvsToUse = ibp.postProcessProperties(pvs, bw.getWrappedInstance(), beanName);
@@ -1828,7 +1828,7 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 
 		Object wrappedBean = bean;
 		if (mbd == null || !mbd.isSynthetic()) {
-			//7: 调用 后置处理器中调用 ApplicationContextPostProcess) 和  调用 @PostConstruct
+			//7: 调用 后置处理器中调用 CommonAnnotationBeanPostProcessor) 和  调用 @PostConstruct
 			// 构造  >  自动注入  > autowired > @PostConstruct
 			wrappedBean = applyBeanPostProcessorsBeforeInitialization(wrappedBean, beanName);
 		}

@@ -596,9 +596,6 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 				/**
 				 * 到这里为止
 				 * Bean(  Definition &  PostProcessor 已经就位)
-				 *
-				 * 此时 对象都只是处于 Definition 的状态 还未真正的创建
-				 *
 				 */
 
 				// 初始化 国际化信息

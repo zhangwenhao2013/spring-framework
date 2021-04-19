@@ -277,7 +277,7 @@ public class ConfigurationClassPostProcessor implements BeanDefinitionRegistryPo
 		//获取  bean  定义()
 		/**
 		 * 第一次执行时 DefaultListableBeanFactory#getBeanDefinitionNames()  返回的是 beanDefinitionNames
-		 * 因为 frozenBeanDefinitionNames  冻结的bean definition 是null
+		 *
 		 */
 		String[] candidateNames = registry.getBeanDefinitionNames();
 
