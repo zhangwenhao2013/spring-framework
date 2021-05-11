@@ -1830,6 +1830,7 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 		if (mbd == null || !mbd.isSynthetic()) {
 			//7: 调用 后置处理器中调用 CommonAnnotationBeanPostProcessor) 和  调用 @PostConstruct
 			// 构造  >  自动注入  > autowired > @PostConstruct
+			// BeanPostProcessor 调用
 			wrappedBean = applyBeanPostProcessorsBeforeInitialization(wrappedBean, beanName);
 		}
 
