@@ -26,7 +26,7 @@ public class Test {
 
 	public static void main(String[] args) {
 
-		AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(BeanConfig.class);
+//		AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(BeanConfig.class);
 	/*	Calculate calculate = context.getBean("getCalculateProxyFactoryBean", Calculate.class);
 		calculate.add(1, 9);
 
@@ -50,8 +50,8 @@ public class Test {
 //
 //		calculate.sub(1, 9);
 
-		Phone phone = context.getBean(Phone.class);
-		System.out.println(phone.getPhoneNum());
+//		Phone phone = context.getBean(Phone.class);
+//		System.out.println(phone.getPhoneNum());
 
 
 	}

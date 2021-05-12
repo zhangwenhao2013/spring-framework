@@ -22,7 +22,7 @@ import org.springframework.stereotype.Component;
  * @author zhangwenhao
  * @since 2020/10/16
  */
-@Component
+//@Component
 public class ImportConfig {
 
 	@Bean

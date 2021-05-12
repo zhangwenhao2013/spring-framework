@@ -28,8 +28,8 @@ import org.springframework.context.annotation.Import;
  * @author zhangwenhao
  * @since 2020/9/27
  */
-@Configuration
-@Import({ImportConfig.class})
+//@Configuration
+//@Import({ImportConfig.class})
 public class BeanConfig {
 	@Bean
 	public Calculate getMyCalculate() {
