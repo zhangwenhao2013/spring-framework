@@ -308,6 +308,8 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 				 * 获取合并的 BeanDefinition
 				 *
 				 * 单例无父类的话 只是设置了下作用域,和将beandefinition 添加到了mergedBeanDefinitions
+				 *
+				 * 循环依赖问题?
 				 */
 				final RootBeanDefinition mbd = getMergedLocalBeanDefinition(beanName);
 				checkMergedBeanDefinition(mbd, beanName, args);

@@ -596,7 +596,7 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 				logger.trace("Eagerly caching bean '" + beanName +
 						"' to allow for resolving potential circular references");
 			}
-			//将 初始化好的  半成品Bean 添加到 一级缓存
+			//将 初始化好的  半成品Bean 添加到 3级缓存
 			// 4 : 可以有后置处理器介入 SmartInstantiationAwareBeanPostProcessor
 			addSingletonFactory(beanName, () -> getEarlyBeanReference(beanName, mbd, bean));
 		}
@@ -1190,7 +1190,7 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 			throw new BeanCreationException(mbd.getResourceDescription(), beanName,
 					"Bean class isn't public, and non-public access not allowed: " + beanClass.getName());
 		}
-		// TODO: 2021/4/15 尝试   Supplier  和   Factory 模式实例化
+		// TODO: 2021/4/15 尝试   Supplier/Factory 模式实例化
 		Supplier<?> instanceSupplier = mbd.getInstanceSupplier();
 		if (instanceSupplier != null) {
 			return obtainFromSupplier(instanceSupplier, beanName);
@@ -1239,6 +1239,7 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 		}
 
 		// No special handling: simply use no-arg constructor.
+		// Cglib 方式构造
 		return instantiateBean(beanName, mbd);
 	}
 
@@ -1835,7 +1836,7 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 		}
 
 		try {
-			//调用出初始化方法
+			//调用出初始化方法 @Bean(initMethod = "init") / xml中init-method
 			invokeInitMethods(beanName, wrappedBean, mbd);
 		}
 		catch (Throwable ex) {
