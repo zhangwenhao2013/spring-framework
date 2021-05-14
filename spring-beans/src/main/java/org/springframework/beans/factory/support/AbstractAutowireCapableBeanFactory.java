@@ -1226,6 +1226,8 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 
 		/**
 		 * 下面是实例化 ConstructorResolver通过放射的方式 Bean对象 存放在BeanWrapperImpl 包装类中
+		 *
+		 * autowireConstructor 内部也是Cglib 方式创建实例
 		 */
 		if (ctors != null || mbd.getResolvedAutowireMode() == AUTOWIRE_CONSTRUCTOR ||
 				mbd.hasConstructorArgumentValues() || !ObjectUtils.isEmpty(args)) {
